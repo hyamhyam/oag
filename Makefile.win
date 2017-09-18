@@ -1,0 +1,79 @@
+
+CC = cl.exe
+LINK = link.exe
+PROG=OAG
+
+LINKOPT = /nologo /INCREMENTAL:NO /MANIFEST /ManifestFile:$(PROG).exe.intermediate.manifest /MANIFESTUAC:"level='asInvoker' uiAccess='false'" 
+CFLAGS2 =  -c /nologo /EHsc /D PC
+
+objsuf  = obj
+objs = Algorithm.$(objsuf) AlgorithmAll.$(objsuf) AlgorithmBigCA.$(objsuf) \
+       AlgorithmCA.$(objsuf) AlgorithmGF.$(objsuf) \
+       AlgorithmRandom.$(objsuf) AlgorithmXu.$(objsuf) \
+       ArrayFile.$(objsuf)  \
+       BaseOrthogonalArray.$(objsuf) Constraint.$(objsuf) ModelFile.$(objsuf) \
+       LinearGraph.$(objsuf) Matrix.$(objsuf) Random.$(objsuf) \
+       OrthogonalArray.$(objsuf) ProgInfo.$(objsuf) \
+       ExString.$(objsuf) TestParameter.$(objsuf) Util.$(objsuf)
+
+$(PROG).exe: $(PROG).cpp $(objs) Matrix.h
+	$(CC) $(CFLAGS2) $(PROG).cpp
+	$(LINK) $(LINKOPT) /out:$(PROG).exe $(PROG).$(objsuf) $(objs)
+	mt.exe /nologo /verbose /outputresource:"$(PROG).exe;#1" /manifest $(PROG).exe.intermediate.manifest
+
+Algorithm.$(objsuf): Algorithm.cpp Algorithm.h ProgInfo.h
+	$(CC) $(CFLAGS2) Algorithm.cpp
+
+AlgorithmAll.$(objsuf): AlgorithmAll.cpp AlgorithmAll.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmAll.cpp
+
+AlgorithmCA.$(objsuf): AlgorithmCA.cpp AlgorithmCA.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmCA.cpp
+
+AlgorithmBigCA.$(objsuf): AlgorithmBigCA.cpp AlgorithmBigCA.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmBigCA.cpp
+
+AlgorithmGF.$(objsuf): AlgorithmGF.cpp AlgorithmGF.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmGF.cpp
+
+AlgorithmRandom.$(objsuf): AlgorithmRandom.cpp AlgorithmRandom.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmRandom.cpp
+
+AlgorithmXu.$(objsuf): AlgorithmXu.cpp AlgorithmXu.h ProgInfo.h
+	$(CC) $(CFLAGS2) AlgorithmXu.cpp
+
+ArrayFile.$(objsuf): ArrayFile.cpp ArrayFile.h ProgInfo.h
+	$(CC) $(CFLAGS2) ArrayFile.cpp
+
+BaseOrthogonalArray.$(objsuf): BaseOrthogonalArray.cpp BaseOrthogonalArray.h Matrix.h ProgInfo.h
+	$(CC) $(CFLAGS2) BaseOrthogonalArray.cpp
+
+Constraint.$(objsuf): Constraint.cpp Constraint.h ProgInfo.h
+	$(CC) $(CFLAGS2) Constraint.cpp
+
+ExString.$(objsuf): ExString.cpp ExString.h
+	$(CC) $(CFLAGS2) ExString.cpp
+
+LinearGraph.$(objsuf): LinearGraph.cpp LinearGraph.h ProgInfo.h
+	$(CC) $(CFLAGS2) LinearGraph.cpp
+
+Matrix.$(objsuf): Matrix.cpp  Matrix.h ProgInfo.h
+	$(CC) $(CFLAGS2) Matrix.cpp
+
+ModelFile.$(objsuf): ModelFile.cpp ModelFile.h Matrix.h ProgInfo.h
+	$(CC) $(CFLAGS2) ModelFile.cpp
+
+OrthogonalArray.$(objsuf): OrthogonalArray.cpp OrthogonalArray.h Matrix.h ProgInfo.h
+	$(CC) $(CFLAGS2) OrthogonalArray.cpp
+
+ProgInfo.$(objsuf): ProgInfo.cpp ProgInfo.h
+	$(CC) $(CFLAGS2) ProgInfo.cpp
+
+Random.$(objsuf): Random.cpp Random.h
+	$(CC) $(CFLAGS2) Random.cpp
+
+TestParameter.$(objsuf): TestParameter.cpp TestParameter.h ProgInfo.h
+	$(CC) $(CFLAGS2) TestParameter.cpp
+
+Util.$(objsuf): Util.cpp Util.h Matrix.h ProgInfo.h
+	$(CC) $(CFLAGS2) Util.cpp
