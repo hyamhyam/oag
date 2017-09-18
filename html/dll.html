@@ -1,0 +1,110 @@
+﻿<html>
+<head>
+<title>条件生成用dll</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+<body>
+<h1>条件生成用dll</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  <a href="more.html" class="nodecoration">少し詳しい説明</a>  &gt; 
+  条件生成用dll 
+  </div>
+
+
+
+
+
+
+
+<br>
+
+<h2>条件生成用dll</h2>
+<p>
+Windowsだけですが，ソフトウェア自動テストを想定して，
+組合せ条件を生成するdll（CombinatorialTesting.dll）を提供しています。<br>
+dllディレクトリ下の，_readme.txt および
+TestProgram.cpp を参照してください。<br>
+<br>
+
+
+<h3>TestProgram.cpp の簡単な説明</h3>
+<p>
+
+<pre class="file">
+void testModule(string aaa, string bbb, string ccc, string ddd){
+   <font color=green>// テストするモジュールです</font>
+   <font color=green>// 引数が呼び出し毎に変わります</font>
+}   
+
+
+int main(int argc, char **argv)
+{
+    if(argc != 2 && argc != 4){
+        cout << "USAGE : TestProgram.exe  model-file-name [-a (GF|all)]" << endl;
+        return -1;
+    }
+
+    CombinatorialTesting *ct = new CombinatorialTesting( argc, argv );
+    
+    while( ct->GetTestRecord() ){ <font color=green>// 条件を1つずつ取り出す</font>
+    
+        <font color=green>// 条件はtestRecordに設定されています</font>
+        vector &lt;string&gt; values = ct->testRecord ;
+        
+        <font color=green>// 以下はベタな書き方です。vectorのままが汎用的でしょう．．．</font>
+        testModule(values[0], values[1], values[2], values[3]);
+    }
+
+    return 0;
+}
+</pre>
+
+
+<br>
+<p>
+<h3>注意事項など</h3>
+<ul>
+<!--
+  <li>アルゴリズムは以下に固定しています。<br>
+    <span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+      -level &nbsp; 2  &nbsp;  -noD  &nbsp;モデルファイル</span>
+    </span>
+-->
+  <li> Visual C++ 2010 Expressが必要です。
+  
+  <li>dllを作ってみたものの，本当に使い道があるのか，私も思案中．．．<br>
+    <!--
+     （dllはソフトウェアの自動テスト向きだが，ソフトウェアのテストなら<br>
+       パラメタの数も値の数も大量のケースでないと自動テストのうまみがない。<br>
+       しかし，大量ケースでは直交表は計算できない。<br>
+       と考えると，直交表はソフトウェアテスト向きではない。<br>
+       うーーーん）
+    -->
+</ul>
+
+<br>
+
+<br>
+<br>
+<br>
+<br>

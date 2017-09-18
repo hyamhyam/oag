@@ -1,0 +1,244 @@
+﻿<html>
+<head>
+<title>生成アルゴリズムに関する少し詳しい説明</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<body>
+<h1>生成アルゴリズムに関する少し詳しい説明</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  <a href="detail4gen.html" class="nodecoration">直交表生成の説明</a>  &gt; 
+  生成アルゴリズム
+  </div>
+
+<h2>-algorithm { GF | Xu | all | random | CA }  </h2>
+<p>
+使用するアルゴリズムを固定します。<br>
+<br>
+<ul>
+  <li>GF : 排他的論理和を拡張する方式で生成
+  <li>Xu : Hongquan XuのJ2最小化によるアルゴリズムで生成
+            （遅いです。チューニングします）
+  <li>all : all combination (全組合せ。直交表ではありません。ソフトウェアテスト用 ）
+  <li>random : ランダム（直交表ではありません。ソフトウェアテスト用 ）
+  
+  <li>CA : Covering Array（強度2だけ。直交表ではありません。
+                  <a href="qict.html">qictのルーチン</a> を使っています）
+
+</ul>
+<br>
+<h3>-algorithm指定がない場合</h3>
+<p>
+-algorithm を指定しない場合，以下の順で直交表を作成できるか試します<br>
+    <ol>
+      <li>内部に保持したいくつかの著名な直交表に該当するか？
+      <li>-algorithm GF
+      <li>-algorithm Xu
+    </ol>
+<br>
+<br>
+
+
+<h3>-algorithm GF に固定した場合</h3>
+<p>
+レベルを２と見なして生成します。各パラメタの値の個数が揃っていない場合は，
+２のべき乗になるように，自動で補完します。<br>
+また，補完した要素には"(D)"をつけます。<br>
+
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_2     b_1     c_1
+a_2     b_2     c_2
+a_3     b_1     c_2
+a_3     b_2     c_1
+a_1(D)  b_1     c_2
+a_1(D)  b_2     c_1
+</pre>
+<p>
+レベル数はOAG側である程度自動判定しますが，
+レベル数を明示的に指定する場合は，-levelオプションを使います。<br>
+<br>
+<br>
+<h2>-algorithm GF と合わせて使うオプション </h2>
+<h3>-noD &nbsp;  | &nbsp;  -xD </h3>
+<p>
+ダミーレベルを補完したときに，"(D)"をつけません。<br>
+<br>
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+  &nbsp;  -noD  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_2     b_1     c_1
+a_2     b_2     c_2
+a_3     b_1     c_2
+a_3     b_2     c_1
+a_1     b_1     c_2
+a_1     b_2     c_1
+</pre>
+
+<br>
+<h3> -level num &nbsp;  | &nbsp;  -l num </h3>
+<p>
+レベル数を明示的に指定します。<br>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;  -level &nbsp; 3 
+  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_1     b_1(D)  c_1(D)
+a_2     b_1     c_2
+a_2     b_2     c_1(D)
+a_2     b_1(D)  c_1
+a_3     b_1     c_1(D)
+a_3     b_2     c_1
+a_3     b_1(D)  c_2
+</pre>
+<p>
+レベルを3にすると，パラメタの数が3のべき乗でないBBBとCCCを，<br>
+3のべき乗になるよう補完して生成します。<br>
+<br>
+常にレベル2でダミーレベルの補完ありにしておくと，<br>
+どのようなモデルファイルであってもそれなりに生成できます。<br>
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+-level &nbsp; 2  &nbsp;  -noD  &nbsp;モデルファイル
+</span>
+
+<br>
+<br>
+
+<h2>-algorithm Xu と合わせて使うオプション </h2>
+<h3>-quiet &nbsp;  |   &nbsp;  -q </h3>
+<p>
+計算途中の情報を表示しません。<br>
+<br>
+Xuのアルゴリズムを使った場合は，デフォルトでは途中経過を出しています。<br>
+（時間がかかる場合があるため）<br>
+ただし生成したものが直交表でない場合は，-qオプションをつけていても
+J2-Optimalityなどを表示します。<br>
+
+<h3>-TimeSeed  &nbsp;  | &nbsp;  -ts </h3>
+<p>
+ランダム生成のseedに時間を使います。<br>
+<br>
+このアルゴリズムでは，乱数を使いますが<br>
+固定シードのため，条件が同じなら毎回同じ結果になります。
+（回帰テストのために，わざとそうしています）<br>
+毎回ランダムにする場合は，-TimeSeedオプションをつけてください。<br>
+
+
+<h3>-T 数字 </h3>
+<p>
+列追加時の，試行回数を指定します（デフォルト10回）<br>
+<br>
+
+<h3>-size 数字 </h3>
+<p>
+テスト回数（run size）を明示的に与えます（デフォルトは自動計算）<br>
+<br>
+
+<h2>-algorithm all オプション （All Combinations：完全組合せ）</h2>
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<p>
+であれば， ３×２×２＝１２ のように無条件に全組合せを生成します。<br>
+<br>
+モデルファイルによっては件数が膨大になります。<br>
+<br>
+<br>
+<br>
+<h2>-algorithm random オプション </h2>
+<p>
+モデルファイルから生成される直交表と同サイズのランダムな配列を生成します。<br>
+実際にテストに使った場合の効果を直交表と比べるための用途です。<br>
+<br>
+<h3>-size 数字 </h3>
+<p>
+テスト回数（run size）を明示的に与えます（直交表と同サイズ）<br>
+<br>
+<h3>-TimeSeed &nbsp;   | &nbsp;  -ts </h3>
+<p>
+ランダム生成のseedに時間を使います。<br>
+
+<br>
+<br>
+
+<h2>-algorithm CA オプション （Covering Array。ただし現在はPairwise）</h2>
+<p>
+テスト件数が膨大となるようなモデルファイルでは，直交表が計算できない場合が多々あります。<br>
+その場合でも，-algorithm CAでは生成できる可能性が高いです。<br>
+<br>
+<br>
+<h2> -noStream と -Stream </h2>
+<p>
+-noStreamの場合，生成したデータを配列に蓄積します。<br>
+-Streamの場合，生成したデータをそのまま標準出力に流します。<br>
+<br>
+-algorithm all または random では，-Streamがデフォルトです。<br>
+特に-algorithm all では，生成データが大量になる場合があり，-noStreamではメモリ不足になる
+可能性があるためです。<br>
+ただし，データを蓄積せず流すため，因子間網羅率など-showで出す情報を計算できません。<br>
+<br>
+逆に-algorithm GF または Xuの場合，-streamは選択できません。<br>
+これらのアルゴリズムでは，テストケース全体を横に成長させていくからです。<br>
+<img src="grow.png"><br>
+<br>
+

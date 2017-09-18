@@ -1,0 +1,120 @@
+﻿<html>
+<head>
+<title>制約条件</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<body>
+<h1>制約条件</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  <a href="more.html" class="nodecoration">少し詳しい説明</a>  &gt; 
+  制約条件
+  </div>
+
+<h2>制約条件 のサンプル</h2>
+<p>
+ごく簡易的な制約条件を使用できます。<br>
+<br>
+
+<ul>
+  <li>制約条件は以下の形だけ使えます(１行内に書いてください)<br>
+     <i><font color="green">
+        IF [parameter] = "value" THEN [parameter] = "value";</font></i><br>
+     <br>
+</ul>
+
+<p>
+
+Constraints002.txt
+<pre class="file">
+<font color="green">#
+# Machine 1
+#</font>
+OS_1:   Win2000, WinXP
+SKU_1:  Professional, Server, Datacenter, WinPowered
+LANG_1: EN, DE
+ 
+<font color="green">#
+# Machine 2
+#</font>
+OS_2:   Win2000, WinXP
+SKU_2:  Professional, Server, Datecenter, WinPowered
+LANG_2: EN, DE
+
+<font color="green">#
+# WinXP is always Professional in our case
+#</font>
+<font color=blue>if [OS_1] = "WinXP" then [SKU_1] = "Professional";</font>
+<font color=blue>if [OS_2] = "WinXP" then [SKU_2] = "Professional";</font>
+
+<font color="green">#
+# No German WinPowered 
+#</font>
+<font color=blue>if [SKU_1] = "WinPowered" then [LANG_1] = "EN";</font>
+</pre>
+
+
+
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  Constraints002.txt  </span>
+</span>
+<pre>
+OS_1    SKU_1   LANG_1  OS_2    SKU_2   LANG_2
+Win2000 Professional    EN  Win2000 Professional    EN
+Win2000 Professional    EN  Win2000 Server  DE
+Win2000 Server  DE  WinXP   Professional    EN
+Win2000 Datacenter  DE  Win2000 Datecenter  DE
+Win2000 Datacenter  DE  Win2000 WinPowered  EN
+</pre>
+<br>
+<p>
+-noConstraintをつけると制約条件を無視します。<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  Constraints002.txt   &nbsp;  -noConstraint </span>
+</span>
+<pre>
+OS_1    SKU_1   LANG_1  OS_2    SKU_2   LANG_2
+Win2000 Professional    EN  Win2000 Professional    EN
+Win2000 Professional    EN  Win2000 Server  DE
+WinXP   Professional    DE  WinXP   Datecenter  EN
+WinXP   Professional    DE  WinXP   WinPowered  DE
+Win2000 Server  DE  WinXP   Professional    EN
+Win2000 Server  DE  WinXP   Server  DE
+WinXP   Server  EN  Win2000 Datecenter  EN
+WinXP   Server  EN  Win2000 WinPowered  DE
+WinXP   Datacenter  EN  WinXP   Professional    DE
+WinXP   Datacenter  EN  WinXP   Server  EN
+Win2000 Datacenter  DE  Win2000 Datecenter  DE
+Win2000 Datacenter  DE  Win2000 WinPowered  EN
+WinXP   WinPowered  DE  Win2000 Professional    DE
+WinXP   WinPowered  DE  Win2000 Server  EN
+Win2000 WinPowered  EN  WinXP   Datecenter  DE
+Win2000 WinPowered  EN  WinXP   WinPowered  EN
+</pre>
+<br>
+
+<p>
+一度，直交表全体を生成し，制約条件にあたるレコードを削除するという，簡易的な実装です。<br>
+
+
+

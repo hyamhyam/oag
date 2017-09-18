@@ -1,0 +1,453 @@
+﻿<html>
+<head>
+<title>生成アルゴリズムに関する少し詳しい説明</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<body>
+<h1>生成アルゴリズムに関する少し詳しい説明</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  生成アルゴリズム
+  </div>
+
+
+<h2>オプション</h2>
+<p>
+
+<pre>
+
+＜直交表生成向けのオプション＞
+   -algorithm (GF|Xu|all|random|CA) | -a (GF|Xu|all|random|CA)
+           : select an algorithm <span class="com">&lt;--生成アルゴリズムを選択</span>
+   -indelimit  char | -id char : input-data delimiter (defalut=,) <span class="com">&lt;--入力データ区切り文字</span>
+   -outdelimit char | -od char : output-data delimiter (defalut=tab) <span class="com">&lt;--出力データ区切り文字</span>
+   -show  | -s  : show array information
+   -way num | -w num : caliculate num-way coverage in -show mode <span class="com">&lt;--詳細情報表示</span>
+   -noConstraint  | -x1  : disable constraint records <span class="com">&lt;--制約条件を使わない</span>
+   -random  | -rd : randomize column for algorithm Xu
+   -T num  : specify repeat count for algorithm Xu
+   -size num | -sz num  : specify row(run) size
+   -seed | -sd  : random seed for algorithm Random
+   -noD | -xD  : do not add (D) for complementation
+   -Stream   | -sm  : stream mode
+   -noStream | -xS  : not stream mode
+   -level num | -l num  : level for test parameters
+   -quiet | -q  : no verbose message
+ </pre>
+<br>
+
+<!--
+<ul>
+  <li>大文字小文字は区別しません。
+  <li>長い名前のオプションの途中までで認識する機能はありません。<br>
+      かならず最後までうつか，短縮形のオプションをご使用ください。
+</ul>
+-->
+
+<br>
+<h2>-indelimit</h2>
+<p>
+入力データの区切り文字は，デフォルトでカンマ(,)ですが，
+これを別文字に変えたい場合に指定します<br>
+ただし，因子名を区切る ":" は変更できません。<br>
+<br>
+<p>
+（例） 空白区切り<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  -indelimit &nbsp; space  
+  &nbsp; model_file_03.txt
+  </span><br>
+</span>
+<br>
+<p>
+（例） タブ区切り<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  -indelimit &nbsp; tab  
+  &nbsp; NOA_file_01.txt
+  </span><br>
+</span>
+<br>
+
+<h2>-outdelimit</h2>
+<p>
+出力データの区切り文字はデフォルトでタブですが
+(pictのデフォルトに合わせています)，<br>
+これを別文字に変えたい場合に指定します<br>
+<br>
+model_file_01.txt
+<pre class="file">
+AAA : a_1,a_2,a_3,a_4
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -outdelimit &nbsp; ,  
+  &nbsp; model_file_01.txt
+</span><br>
+</span>
+<pre>
+AAA,BBB,CCC
+a_1,b_1,c_1
+a_1,b_2,c_2
+a_2,b_1,c_1
+a_2,b_2,c_2
+a_3,b_1,c_2
+a_3,b_2,c_1
+a_4,b_1,c_2
+a_4,b_2,c_1
+</pre>
+<br>
+
+
+<h2>-show &nbsp;  | &nbsp;  -s </h2>
+<p>
+-showをつけると詳細情報を表示します。<br>
+・２因子間網羅率，３因子間網羅率<br>
+・直交表かどうか，どのくらい直交表に近いか<br>
+などを表示します。<br>
+<br>
+
+
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  model_file_01.txt &nbsp; -show </span>
+</span>
+<pre>
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 20
+# covered combinations : 20
+## 3-way coverage
+# coverage rate        : 50 %
+# 3-way combinations   : 16
+# covered combinations : 8
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 36
+# L(n)  : 36
+# ratio : 1
+</pre>
+<p>
+<br>
+"Confirm Array"で出力している"J2(d)"，"L(n)"は，
+以下の2.1の情報を計算しています。<br>
+
+rateが1の場合は直交表です。1でなければ直交表ではありません。<br>
+また，1に近いほど直交性が高くなります。<br>
+<br>
+<a href="http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf">
+http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf</a><br>
+<span class="com">
+ An Algorithm for Constructing Orthogonal and 
+ Nearly-Orthogonal Arrays 
+       With Mixed Levels and Small Runs</span>
+
+<br>
+<br>
+
+<h2>-way num &nbsp;  | &nbsp;  -w num </h2>
+<p>
+-showをつけた場合の詳細情報で num 因子間網羅率まで計算します。<br>
+（-showがデフォルトで表示するのは，2または3因子間網羅率です）<br>
+
+<br>
+model_file_01.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2,b_3
+CCC : c_1,c_2,c_3
+DDD : d_1,d_2,d_3
+EEE : e_1,e_2,e_3
+</pre>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -show &nbsp; -way 5  &nbsp; 
+  &nbsp; model_file_01.txt
+</span><br>
+</span>
+<pre>
+#--------------------------------------------------------
+## Orthogonal Array
+## array data
+# number of parameters = 5
+# test size            = 18
+#--------------------------------------------------------
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 90
+# covered combinations : 90
+## 3-way coverage
+# coverage rate        : 66 %
+# 3-way combinations   : 270
+# covered combinations : 180
+## 4-way coverage
+# coverage rate        : 22 %
+# 4-way combinations   : 405
+# covered combinations : 90
+## 5-way coverage
+# coverage rate        : 7 %
+# 5-way combinations   : 243
+# covered combinations : 18
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 405
+# L(n)  : 405
+# ratio : 1
+#--------------------------------------------------------
+## result array
+AAA     BBB     CCC     DDD     EEE
+a_1     b_1     c_1     d_1     e_1
+a_2     b_2     c_2     d_2     e_2
+a_3     b_3     c_3     d_3     e_3
+a_1     b_1     c_2     d_3     e_2
+a_2     b_2     c_3     d_1     e_3
+a_3     b_3     c_1     d_2     e_1
+a_1     b_2     c_1     d_3     e_3
+a_2     b_3     c_2     d_1     e_1
+a_3     b_1     c_3     d_2     e_2
+a_1     b_3     c_3     d_1     e_2
+a_2     b_1     c_1     d_2     e_3
+a_3     b_2     c_2     d_3     e_1
+a_1     b_2     c_3     d_2     e_1
+a_2     b_3     c_1     d_3     e_2
+a_3     b_1     c_2     d_1     e_3
+a_1     b_3     c_2     d_2     e_3
+a_2     b_1     c_3     d_3     e_1
+a_3     b_2     c_1     d_1     e_2
+</pre>
+<br>
+
+
+
+<h2>-algorithm { GF | Xu | all | random | CA }  </h2>
+<p>
+使用するアルゴリズムを固定します。<br>
+<br>
+<ul>
+  <li>GF : 排他的論理和を拡張する方式で生成
+  <li>Xu : Hongquan XuのJ2最小化によるアルゴリズムで生成
+            （遅いです。チューニングします）
+  <li>all : all combination (全組合せ。直交表ではありません。ソフトウェアテスト用 ）
+  <li>random : ランダム（直交表ではありません。ソフトウェアテスト用 ）
+  
+  <li>CA : Covering Array（強度2だけ。直交表ではありません。
+                  <a href="qict.html">qictのルーチン</a> を使っています）
+
+</ul>
+<br>
+<h3>-algorithm指定がない場合</h3>
+<p>
+-algorithm を指定しない場合，以下の順で直交表を作成できるか試します<br>
+    <ol>
+      <li>内部に保持したいくつかの著名な直交表に該当するか？
+      <li>-algorithm GF
+      <li>-algorithm Xu
+    </ol>
+<br>
+<br>
+
+
+<h3>-algorithm GF に固定した場合</h3>
+<p>
+レベルを２と見なして生成します。各パラメタの値の個数が揃っていない場合は，
+２のべき乗になるように，自動で補完します。<br>
+また，補完した要素には"(D)"をつけます。<br>
+
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_2     b_1     c_1
+a_2     b_2     c_2
+a_3     b_1     c_2
+a_3     b_2     c_1
+a_1(D)  b_1     c_2
+a_1(D)  b_2     c_1
+</pre>
+<p>
+レベル数はOAG側である程度自動判定しますが，
+レベル数を明示的に指定する場合は，-levelオプションを使います。<br>
+<br>
+<br>
+<h2>-algorithm GF と合わせて使うオプション </h2>
+<h3>-noD &nbsp;  | &nbsp;  -xD </h3>
+<p>
+ダミーレベルを補完したときに，"(D)"をつけません。<br>
+<br>
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+  &nbsp;  -noD  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_2     b_1     c_1
+a_2     b_2     c_2
+a_3     b_1     c_2
+a_3     b_2     c_1
+a_1     b_1     c_2
+a_1     b_2     c_1
+</pre>
+
+<br>
+<h3> -level num &nbsp;  | &nbsp;  -l num </h3>
+<p>
+レベル数を明示的に指定します。<br>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;  -level &nbsp; 3 
+  &nbsp; model_file_02.txt
+</span><br>
+</span>
+<pre>
+AAA     BBB     CCC
+a_1     b_1     c_1
+a_1     b_2     c_2
+a_1     b_1(D)  c_1(D)
+a_2     b_1     c_2
+a_2     b_2     c_1(D)
+a_2     b_1(D)  c_1
+a_3     b_1     c_1(D)
+a_3     b_2     c_1
+a_3     b_1(D)  c_2
+</pre>
+<p>
+レベルを3にすると，パラメタの数が3のべき乗でないBBBとCCCを，<br>
+3のべき乗になるよう補完して生成します。<br>
+<br>
+常にレベル2でダミーレベルの補完ありにしておくと，<br>
+どのようなモデルファイルであってもそれなりに生成できます。<br>
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+-level &nbsp; 2  &nbsp;  -noD  &nbsp;モデルファイル
+</span>
+
+<br>
+<br>
+
+<h2>-algorithm Xu と合わせて使うオプション </h2>
+<h3>-quiet &nbsp;  |   &nbsp;  -q </h3>
+<p>
+計算途中の情報を表示しません。<br>
+<br>
+Xuのアルゴリズムを使った場合は，デフォルトでは途中経過を出しています。<br>
+（時間がかかる場合があるため）<br>
+ただし生成したものが直交表でない場合は，-qオプションをつけていても
+J2-Optimalityなどを表示します。<br>
+
+<h3>-TimeSeed  &nbsp;  | &nbsp;  -ts </h3>
+<p>
+ランダム生成のseedに時間を使います。<br>
+<br>
+このアルゴリズムでは，乱数を使いますが<br>
+固定シードのため，条件が同じなら毎回同じ結果になります。
+（回帰テストのために，わざとそうしています）<br>
+毎回ランダムにする場合は，-TimeSeedオプションをつけてください。<br>
+
+
+<h3>-T 数字 </h3>
+<p>
+列追加時の，試行回数を指定します（デフォルト10回）<br>
+<br>
+
+<h3>-size 数字 </h3>
+<p>
+テスト回数（run size）を明示的に与えます（デフォルトは自動計算）<br>
+<br>
+
+<h2>-algorithm all オプション （All Combinations：完全組合せ）</h2>
+<p>
+model_file_02.txt
+<pre class="file">
+AAA : a_1,a_2,a_3
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<p>
+であれば， ３×２×２＝１２ のように無条件に全組合せを生成します。<br>
+<br>
+モデルファイルによっては件数が膨大になります。<br>
+<br>
+<br>
+<br>
+<h2>-algorithm random オプション </h2>
+<p>
+モデルファイルから生成される直交表と同サイズのランダムな配列を生成します。<br>
+実際にテストに使った場合の効果を直交表と比べるための用途です。<br>
+<br>
+<h3>-size 数字 </h3>
+<p>
+テスト回数（run size）を明示的に与えます（直交表と同サイズ）<br>
+<br>
+<h3>-TimeSeed &nbsp;   | &nbsp;  -ts </h3>
+<p>
+ランダム生成のseedに時間を使います。<br>
+
+<br>
+<br>
+
+<h2>-algorithm CA オプション （Covering Array。ただし現在はPairwise）</h2>
+<p>
+テスト件数が膨大となるようなモデルファイルでは，直交表が計算できない場合が多々あります。<br>
+その場合でも，-algorithm CAでは生成できる可能性が高いです。<br>
+<br>
+<br>
+<h2> -noStream と -Stream </h2>
+<p>
+-noStreamの場合，生成したデータを配列に蓄積します。<br>
+-Streamの場合，生成したデータをそのまま標準出力に流します。<br>
+<br>
+-algorithm all または random では，-Streamがデフォルトです。<br>
+特に-algorithm all では，生成データが大量になる場合があり，-noStreamではメモリ不足になる
+可能性があるためです。<br>
+ただし，データを蓄積せず流すため，因子間網羅率など-showで出す情報を計算できません。<br>
+<br>
+逆に-algorithm GF または Xuの場合，-streamは選択できません。<br>
+これらのアルゴリズムでは，テストケース全体を横に成長させていくからです。<br>
+<img src="grow.png"><br>
+<br>
+

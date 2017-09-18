@@ -1,0 +1,204 @@
+﻿<html>
+<head>
+<title>その他の使用例</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<body>
+<h1>その他の使用例</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  その他の使用例 
+  </div>
+
+
+
+
+<br>
+<h2>制約条件 のサンプル</h2>
+<p>
+簡易的な制約条件を使用できます。<br>
+<br>
+
+<ul>
+  <li>制約条件は以下の形だけ使えます(１行内に書いてください)<br>
+     <i><font color="green">
+        IF [parameter] = "value" THEN [parameter] = "value";</font></i><br>
+     <br>
+</ul>
+
+<p>
+
+Constraints002.txt
+<pre class="file">
+<font color="green">#
+# Machine 1
+#</font>
+OS_1:   Win2000, WinXP
+SKU_1:  Professional, Server, Datacenter, WinPowered
+LANG_1: EN, DE
+ 
+<font color="green">#
+# Machine 2
+#</font>
+OS_2:   Win2000, WinXP
+SKU_2:  Professional, Server, Datecenter, WinPowered
+LANG_2: EN, DE
+
+<font color="green">#
+# WinXP is always Professional in our case
+#</font>
+<font color=blue>if [OS_1] = "WinXP" then [SKU_1] = "Professional";</font>
+<font color=blue>if [OS_2] = "WinXP" then [SKU_2] = "Professional";</font>
+
+<font color="green">#
+# No German WinPowered 
+#</font>
+<font color=blue>if [SKU_1] = "WinPowered" then [LANG_1] = "EN";</font>
+</pre>
+
+
+
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  Constraints002.txt  </span>
+</span>
+<pre>
+OS_1    SKU_1   LANG_1  OS_2    SKU_2   LANG_2
+Win2000 Professional    EN  Win2000 Professional    EN
+Win2000 Professional    EN  Win2000 Server  DE
+Win2000 Server  DE  WinXP   Professional    EN
+Win2000 Datacenter  DE  Win2000 Datecenter  DE
+Win2000 Datacenter  DE  Win2000 WinPowered  EN
+</pre>
+<br>
+<p>
+-noConstraintをつけると制約条件を無視します。<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  Constraints002.txt   &nbsp;  -noConstraint </span>
+</span>
+<pre>
+OS_1    SKU_1   LANG_1  OS_2    SKU_2   LANG_2
+Win2000 Professional    EN  Win2000 Professional    EN
+Win2000 Professional    EN  Win2000 Server  DE
+WinXP   Professional    DE  WinXP   Datecenter  EN
+WinXP   Professional    DE  WinXP   WinPowered  DE
+Win2000 Server  DE  WinXP   Professional    EN
+Win2000 Server  DE  WinXP   Server  DE
+WinXP   Server  EN  Win2000 Datecenter  EN
+WinXP   Server  EN  Win2000 WinPowered  DE
+WinXP   Datacenter  EN  WinXP   Professional    DE
+WinXP   Datacenter  EN  WinXP   Server  EN
+Win2000 Datacenter  DE  Win2000 Datecenter  DE
+Win2000 Datacenter  DE  Win2000 WinPowered  EN
+WinXP   WinPowered  DE  Win2000 Professional    DE
+WinXP   WinPowered  DE  Win2000 Server  EN
+Win2000 WinPowered  EN  WinXP   Datecenter  DE
+Win2000 WinPowered  EN  WinXP   WinPowered  EN
+</pre>
+<br>
+
+<p>
+一度，直交表全体を生成し，制約条件にあたるレコードを削除するという，簡易的な実装です。<br>
+
+
+
+<br>
+<!--
+<br>
+<h2>レベル2で固定して生成</h2>
+<p>
+常にレベル2でダミーレベルの補完ありにしておくと，<br>
+どのようなモデルファイルであってもそれなりに生成できます。<br>
+<span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+-level &nbsp; 2  &nbsp;  -noD  &nbsp;モデルファイル
+</span>
+<br>
+-->
+
+
+<br>
+
+<h2>条件生成用dll</h2>
+<p>
+Windowsだけですが，ソフトウェア自動テストを想定して，
+組合せ条件を生成するdllを提供しています。<br>
+dllディレクトリ下の，_readme.txt および
+TestProgram.cpp を参照してください。<br>
+<br>
+
+
+<h3>TestProgram.cpp の簡単な説明</h3>
+<p>
+
+<pre class="file">
+void testModule(string aaa, string bbb, string ccc){
+   <font color=green>// テストするモジュールです</font>
+   <font color=green>// 引数が呼び出し毎に変わります</font>
+}   
+
+void main(int argc, char **argv)
+{
+    CombinatorialTesting *ct = new CombinatorialTesting( argv[1] );
+    
+    
+    ct->Generate();<font color=green>// 直交表の生成</font>
+    
+    
+    while( ct->MakeValueArray() ){ <font color=green>// 条件を1つずつ取り出す</font>
+    
+        <font color=green>// 条件はparamValuesに設定されています</font>
+        vector &lt;string&gt; values = ct->paramValues ;
+        
+        <font color=green>// 以下はベタな書き方です。vectorのままが汎用的でしょう．．．</font>
+        testModule(values[0], values[1], values[2]);
+    }
+
+}
+</pre>
+
+
+<br>
+<p>
+<h3>注意事項など</h3>
+<ul>
+  <li>アルゴリズムは以下に固定しています。<br>
+  <span class="cmdline">OAG  &nbsp;  -algorithm GF &nbsp;   
+-level &nbsp; 2  &nbsp;  -noD  &nbsp;モデルファイル</span>
+</span>
+
+  <li> Visual C++ 2010 Expressが必要です。
+  
+  <li>dllを作ってみたものの，本当に使い道があるのか，私も思案中．．．<br>
+     （dllはソフトウェアの自動テスト向きだが，ソフトウェアのテストなら<br>
+       パラメタの数も値の数も大量のケースでないと自動テストのうまみがない。<br>
+       しかし，大量ケースでは直交表は計算できない。<br>
+       と考えると，直交表はソフトウェアテスト向きではない。<br>
+       うーーーん）
+</ul>
+
+<br>
+
+<br>
+<br>
+<br>
+<br>

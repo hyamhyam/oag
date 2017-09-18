@@ -1,0 +1,149 @@
+﻿<html>
+<head>
+<title>OAGの少し詳しい説明</title>
+
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<body>
+<h1>OAGの少し詳しい説明</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  少し詳しい説明 
+  </div>
+<p>
+<h2>概要</h2>
+<p>
+OAG  ( Orthogonal Array Generator ) はシンプルな直交表生成ツールです。<br> 
+<p>
+<ul>
+  <li>コマンドラインで動かします。
+  <li>PICTと同じ形式のデータを入力とします
+  <li>フリーです
+  <li>直交表は以下のように生成しています。 
+   <p>
+    <ol>
+      <li>田口やSloane等の著名で公開されている直交表は内部に保持し，
+          因子数に合わせてそのまま展開。
+      <li>水準がすべて同じで素数の場合は，排他的論理和を拡張する方式で生成。
+      <li>その他の場合は，
+          Hongquan Xuのアルゴリズム(*1)で生成。
+    </ol>
+   
+  <br>
+  <li>直交表は条件が厳しく生成できないことの方が多いため，<br> 
+  そのときは「Hongquan Xuのアルゴリズム」でできるだけ直交表に近い行列(Nearly-Orthogonal Array)を生成します。
+  <br>
+  <br> 
+  <li>ごく簡易的な<a href="constraint.html">制約条件</a>を使用できます。  <br>
+
+  <br>
+  <li>直交表以外にもいくつかの組合せ行列を生成できます。
+    <ol>
+      <li>Pairwise （<a href="qict.html">qictのルーチン</a>を使っています）
+      <li>All Combinations （完全組合せ）
+      <li>ランダム
+    </ol>
+  <li>生成済み行列に対し，直交表かどうか，どのくらい直交表に近いか検証できます。 
+     (-checkオプション)
+  <li>ソフトウェア自動テスト向けに，<a href="dll.html">条件生成用dll</a>を提供します。<br>
+
+  
+  
+</ul>
+
+
+<p>
+<br>
+(*1)<br>
+<a href="http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf">
+ http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf</a><br>
+<br>
+
+<br>
+
+<h2>使用例</h2>
+<p>
+<h3>（１）単純な直交表の生成</h3>
+<p>
+model_file_01.txt
+<pre class="file">
+AAA : a_1,a_2,a_3,a_4
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp;  model_file_01.txt  </span>
+</span>
+<pre>
+AAA	BBB	CCC
+a_1	b_1	c_1
+a_1	b_2	c_2
+a_2	b_1	c_1
+a_2	b_2	c_2
+a_3	b_1	c_2
+a_3	b_2	c_1
+a_4	b_1	c_2
+a_4	b_2	c_1
+</pre>
+<p>
+<!--
+※点線囲みは，標準出力への出力結果です。<br>
+-->
+ <br> 
+
+<h3>（２）生成済み直交表の検証</h3>
+<p>
+array_file.txt 
+<pre class="file">
+AAA	BBB	CCC
+a_1	b_1	c_1
+a_1	b_2	c_2
+a_2	b_1	c_1
+a_2	b_2	c_2
+a_3	b_1	c_2
+a_3	b_2	c_1
+a_4	b_1	c_2
+a_4	b_2	c_1
+</pre>
+<br>
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check &nbsp;  array_file.txt  </span>
+</span>
+
+<pre>
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 20
+# covered combinations : 20
+## 3-way coverage
+# coverage rate        : 50 %
+# 3-way combinations   : 16
+# covered combinations : 8
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 36
+# L(n)  : 36
+# ratio : 1  <span class="com">&lt;--ここが１なら直交表です</span></pre>
+ <br> 
+
+
+<br>

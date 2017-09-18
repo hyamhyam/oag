@@ -1,0 +1,106 @@
+﻿<html>
+<head>
+<title>QICT</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<body>
+<h1>QICT</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  QICT 
+  </div>
+<p>
+<br>
+
+Pairwiseの生成には，QICTのソース(C#)をC++に書き換えたものを
+使っています。
+<br>
+参考までC++に書き換えたソースを置いておきます。<br>
+<a href="qict.cpp">qict.cpp</a><br>
+<br>
+<br>
+もし，これだけ試してみたい方は，以下でコンパイルしてください。<br>
+<br>
+(Visual C++ 2010 Express on Windows)<br>
+cl  /EHsc  qict.cpp<br>
+<br>
+(gcc on Linux)<br>
+g++ qict.cpp -o qict<br>
+<br>
+testData.txt
+<pre class="file">
+Param0: a, b, c, d
+Param1: e, f, g
+Param2: h, i
+Param3: j, k
+</pre>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">qict   &nbsp;  testData.txt  </span>
+</span>
+<pre>
+There are 4 parameters
+There are 11 parameter values
+
+Parameter values:
+a b c d e f g h i j k
+
+Legal values internal representation:
+Parameter0: 0 1 2 3
+Parameter1: 4 5 6
+Parameter2: 7 8
+Parameter3: 9 10
+
+There are 44 pairs
+0: a e h j
+1: a f i k
+2: a g h k
+3: b g i j
+4: c e i k
+5: d f h j
+6: b e h k
+7: c f h j
+8: d g i k
+9: b f h j
+10: c g h j
+11: d e h j</pre>
+<br>
+<br>
+
+
+<h2>QICTのオリジナル</h2>
+<p>
+日本語の説明<br>
+<a href="http://msdn.microsoft.com/ja-jp/magazine/ee819137.aspx">
+http://msdn.microsoft.com/ja-jp/magazine/ee819137.aspx</a>
+<br>
+<br>
+
+ソース（C#）のダウンロード<br>
+<a href="http://archive.msdn.microsoft.com/mag1209TestRun/Release/ProjectReleases.aspx?ReleaseId=3657">
+http://archive.msdn.microsoft.com/mag1209TestRun/Release/ProjectReleases.aspx?ReleaseId=3657</a>
+
+<br>
+<br>
+
+<br><br>
+<br>
+<br>

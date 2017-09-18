@@ -1,0 +1,191 @@
+﻿<html>
+<head>
+<title>フリーの直交表生成ツール OAG</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array, 直交表生成ツール, フリー, 直交表作成プログラム ">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+
+<body>
+
+
+
+
+
+<h1>フリーの直交表生成ツール OAG </h1>
+<!--
+  <div class="topicpathR"> 
+    <a href="index_en.html" class="nodecoration">English page</a>  
+  </div>
+-->
+
+<p>
+<!-- 
+
+ <span class="update">
+2012/07/20 </span><br>
+<span class="com">
+シーケンス網羅行列を考える。<br>
+300個のパラメタで強度2のテストサイズの最少は？と考える<br>
+<br>
+もしかして，300個を順に並べたものと，その逆順の2個でいい？？<br>
+あれれ？？？<br>
+<br>
+ <span class="update">
+2012/07/26 </span><br>
+おもしろいなぁ，と思ったら，以下の文書のP.23「5.1」に書いてあった。<br>
+<a href="http://csrc.nist.gov/groups/SNS/acts/documents/SP800-142-101006.pdf">
+http://csrc.nist.gov/groups/SNS/acts/documents/SP800-142-101006.pdf</a>
+<br>
+<br>
+
+ <span class="update">
+2012/08/04 </span><br>
+シーケンス網羅行列用のルーチンを作ってみよう。<br>
+
+Sloaneのページを読んでいた。<br>
+OAGはデフォルトでは，素数のべき乗で生成するので<br>
+oa.12.11.2.2を生成できない（サイズが16になる）。<br>
+<br>
+でも，<br>
+oag modelfile -a xu -size 12<br>
+とすれば生成できる。<br>
+（わかりにくいなぁ）<br>
+
+・最近，読んでいるのはCovering Arrayの話ばかり．．．
+・今，Combination Testing Strategies A Survey というのを読んでいます。
+
+・だんだん「直交表生成ツール」から離れてきたような．．．
+
+・大規模モデルファイルを処理できる
+  Covering Arrayの生成アルゴリズムは何が良いかな．．．<br>
+
+・10ks超えた... 整理しないと
+-->
+
+
+<h2>概要</h2>
+<p>
+OAG  ( Orthogonal Array Generator ) はシンプルな直交表生成ツールです。<br> 
+<p>
+<ul>
+  <li>コマンドラインで動かします。
+  <li>PICTと同じ形式のデータを入力とします
+  <li>フリーです
+  <li>直交表は以下のように生成しています。
+   <p>
+    <ol>
+      <li>水準がすべて同じで素数の場合は，排他的論理和を拡張する方式で生成。
+      <li>その他の場合は，
+          Hongquan Xuのアルゴリズム(*1)で生成。
+    </ol>
+   
+  <br>
+<!--
+  <li>ソフトウェア自動テスト向けに，条件生成用dllを提供します。<br>
+-->
+  
+  
+</ul>
+
+
+<p>
+<br>
+<a href="more.html">少し詳しい説明</a><br>
+<br>
+(*1)<br>
+<a href="http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf">
+ http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf</a><br>
+<br>
+
+
+
+
+<br>
+<h2>使い方</h2>
+<p>
+<h3>（１）直交表の生成</h3>
+<p>
+<span class="cmdline">OAG   &nbsp; モデルファイル名 &nbsp;
+   <!-- [ &nbsp; -level &nbsp; レベル数 &nbsp; ] -->
+   </span><br>
+<br>
+モデルファイルの形式<br>
+<pre class="file">
+ParamName1 : Value1-1, Value1-2, Value1-3, ...
+ParamName2 : Value2-1, Value2-2, Value2-3, ...
+</pre>
+<p>
+<a href="detail4gen.html">
+直交表生成の少し詳しい説明</a><br>
+<br>
+<br>
+
+
+<h3>（２）生成済み直交表の検証</h3>
+<p>
+<span class="cmdline">OAG   &nbsp; -check &nbsp; 直交表のファイル名</span><br>
+
+<br>
+<p>
+
+
+<a href="detail4check.html">
+配列検証の少し詳しい説明</a><br>
+<br>
+<br>
+
+<!--
+<a href="example.html">その他の使用例</a> <br> 
+ <br> 
+-->
+
+
+
+
+
+<br>
+<h2>制限など</h2>
+<p>
+<ul>
+
+  <li>強さは 2 だけです<br>
+    
+  <li>
+まだまだ、作成中・勉強中です。<br>
+
+<!--
+  <li>
+   最小covering array探索はNP完全とか，直交表の存在性については
+   厳密に解明されていないとか，
+   数学の素人が手を出す問題ではないんだけど．．．<br>
+   理論面は数学者の方々にまかせ，テストにおける利用者として勉強中です。
+-->
+   
+</ul>
+
+
+<h2>作者</h2>
+<p>
+<a href="../kj_dict/profile.html">
+YAMAMOTO Hiroshi</a>
+
+<br>
+<img src="gmail.png"><br>
+※ご指摘，ご質問などありましたらお気軽にご連絡ください。
+
+<br>
+<br>
+<br>
+<hr noshade>
+  <div class="topicpathL"> 
+    <a href="index_en.html" class="nodecoration">English page</a>  <br>
+  </div>
+
+
+<br>
+<br>
+<br>
+<br>

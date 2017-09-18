@@ -1,0 +1,279 @@
+<html>
+<head>
+<title>OAG (Orthogonal Array Generator)</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array, free tool ">
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="dict_en.css" rel=stylesheet type=text/css>
+</head>
+<body>
+<h1>OAG (Orthogonal Array Generator)</h1>
+  <div class="topicpathR"> 
+    <a href="index.html" class="nodecoration">Japanese page</a>  
+  </div>
+
+<p>
+
+<h2>abstract</h2>
+<p>
+OAG (Orthogonal Array Generator) is very simple test case generator using 
+an orthogonal or nearly-orthogonal arrays.<br>
+<ul>
+  <li>command line tool
+  <li>PICT style model file 
+  <li>Free  <!-- (GPL ; I would like to ... later) -->
+  <br>
+  <br>
+  <li>construction strategy for Orthogonal Array
+   <p>
+    <ol>
+
+      <li>if all factors have same level  and prime number,
+          then use EX-OR extension.
+      <li>if the model file has a mixed level or EX-OR extension is failed,<br>
+      then try Hongquan Xu's algorithm (*1) .
+    </ol>
+   
+  <br>
+  <li>and, some other algorithms can be enabled.
+   <p>
+    <ol>
+      <li>Pairwise ( using <a href="qict_e.html">qict routine</a>)
+      <li>All Combinations
+      <li>Random
+    </ol>
+  <br>
+  <li>this tool can check an array ;  orthogonal array or nearly-orthogonal array.
+
+</ul>
+<p>
+(*1)<br>
+<a href="http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf">
+ http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf</a><br>
+<br>
+
+
+
+
+<h2>usage</h2>
+<p>
+<h3>generate orthogonal array</h3>
+<p>
+<span class="cmdline">OAG   &nbsp; model-file-name</span><br>
+
+<h3>check array</h3>
+<p>
+<span class="cmdline">OAG   &nbsp; -check &nbsp; array-file-name</span><br>
+<br>
+      
+<h4>model-file format</h4>
+<pre class="file">
+ParamName1 : Value1-1, Value1-2, Value1-3, ...
+ParamName2 : Value2-1, Value2-2, Value2-3, ...
+
+ ( delimiter is comma )
+</pre>
+
+<h4>array-file-name format</h4>
+<pre class="file">
+ParamName1  ParamName2 ...
+Value1-n    Value2-n ...
+Value1-n    Value2-n ...
+Value1-n    Value2-n ...
+
+ ( delimiter is tab )
+</pre>
+<br>
+<br>
+
+
+<p>
+<h2>example</h2>
+<p>
+<h3>generate orthogonal array</h3>
+<p>
+model_file_01
+<pre class="file">
+AAA : a_1,a_2,a_3,a_4
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp;  model_file_01.txt  </span>
+</span>
+<pre>
+AAA	BBB	CCC
+a_1	b_1	c_1
+a_1	b_2	c_2
+a_2	b_1	c_1
+a_2	b_2	c_2
+a_3	b_1	c_2
+a_3	b_2	c_1
+a_4	b_1	c_2
+a_4	b_2	c_1
+</pre>
+ <br> 
+
+<h3>check pre-generated OA(or NOA) file</h3>
+<p>
+NOA_file_01.txt
+<pre class="file">
+AAA	BBB	CCC
+a_1	b_1	c_1
+a_1	b_2	c_2
+a_2	b_1	c_1
+a_2	b_2	c_2
+a_3	b_1	c_2
+a_3	b_2	c_1
+a_4	b_1	c_2
+a_4	b_2	c_1
+</pre>
+
+<br>
+
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check &nbsp;  NOA_file_01.txt  </span>
+</span>
+
+<pre>
+#--------------------------------------------------------
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 90
+# covered combinations : 90
+## 3-way coverage
+# coverage rate        : 64 %
+# 3-way combinations   : 280
+# covered combinations : 180
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 265
+# L(n)  : 255
+# ratio : 0.962264
+# [X] this is not Orthogonal Array.
+</pre>
+ <br> 
+
+<p>
+<a href="example_en.html">other examples ...</a> <br> 
+ <br> 
+
+<!--
+
+<br>
+<h2>limitation</h2>
+<p>
+<ul>
+  <li>constraint record is supported following format only... (must be in one line)<br>
+     <i><font color="teal">
+        IF [parameter] = "value" THEN [parameter] = "value";</font></i><br>
+     <br>
+
+  <li>strength 2 only<br>
+     <br>
+   
+  
+    
+</ul>
+-->
+
+<h2>source</h2>
+<p>
+not yet...
+
+<!--
+<h2>links for studying "Combinatorial Testing"</h2>
+<p>
+    
+<h3>Orthogonal Arrays</h3>
+<ul>
+  <li><a href="http://www2.research.att.com/~njas/oadir/">
+    A Library of Orthogonal Arrays : N. J. A. Sloane </a>
+    
+  <li><a href="http://support.sas.com/techsup/technote/ts723.html">
+    Orthogonal Arrays : SAS ts723</a>
+    
+  <li><a href="http://www.york.ac.uk/depts/maths/tables/orthogonal.htm">
+    Orthogonal Arrays  : The University of York </a>
+    
+  <li><a href="http://designcomputing.net/gendex/noa/">
+    NOA: Near-Orthogonal Array Program</a>
+
+  <li><a href="http://www.stat.ucla.edu/~hqxu/pub/Xu2002.pdf">
+     An Algorithm for Constructing Orthogonal and Nearly-Orthogonal Arrays 
+       With Mixed Levels and Small Runs
+  </a> (pdf)
+</ul>
+
+ <br>
+<h3>Combinatorial Testing</h3>
+<ul>
+  <li><a href="http://www.pairwise.org/">
+    Pairwise Testing by Jacek Czerwonka  </a>
+
+
+  <li> <a href="http://csrc.nist.gov/acts/grindal-offutt-andler.pdf">
+  Combination Testing Strategies : A Survey
+  </a> (pdf) 2004
+
+  <li><a href="http://cse.unl.edu/citportal/tools/casa/index.php">
+    Covering Arrays by Simulated Annealing (CASA)  </a>
+
+  
+  
+  <li> <a href="http://people.stat.sfu.ca/~dbingham/posterconoa.pdf">
+  A New Algorithm for Constructing Orthogonal and Nearly-Orthogonal Arrays
+  </a> (pdf) 2007
+
+ <br>
+ <br>
+  <li> <a href="http://msdn.microsoft.com/en-us/library/cc188960.aspx">
+  Software Testing in MSDN</a>
+  
+  <li> <a href="http://msdn.microsoft.com/en-us/library/cc150619.aspx">
+  Pairwise Testing in the Real World: Practical Extensions to Test-Case Scenarios in MSDN</a>
+</ul>
+
+
+  <li><a href="http://testcover.com/pub/background/cover.htm">
+  On the Construction of Orthogonal Arrays and Covering Arrays Using Permutation Groups 
+  ( George Sherwood ) </a>
+
+http://www.inning4.com/inning4/manual/page68.htm
+The library of Orthogonal arrays
+  1. Rao Hamming algorithm 
+  2. Difference Schemes algorithm 
+  3. Hadamard matrix family of algorithms 
+  4. Transformation from symmetric to mixed arrays. 
+
+http://pietereendebak.nl/files/JCDarticleR2.pdf
+http://www.iasri.res.in/design/oarray/oa/default.htm
+  
+</ul>
+-->
+
+<h2>author</h2>
+<p>
+<a href="../kj_dict/profile.html">
+YAMAMOTO Hiroshi</a><br>
+<br>
+I'm very glad to receive bug reports and comments. Please contact email: <br>
+<img src="gmail.png">
+<br>
+<br>
+<hr noshade>
+  <div class="topicpathL"> 
+    <a href="index.html" class="nodecoration">Japanese page</a>  <br>
+  </div>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>

@@ -1,0 +1,61 @@
+﻿<html>
+<head>
+<title>大規模モデルファイル向けCovering Array</title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+
+<body>
+<h1>大規模モデルファイル向けCovering Array</h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  大規模モデルファイル向けCovering Array
+  </div>
+
+<p>
+ソフトウェアテストを想定し，試しに作ってみました。<br>
+一晩で100万件くらいの自動テスト流すことを想定しています。<br>
+<br>
+
+<h2>作ってみたものの．．．</h2>
+<p>
+パラメタ10個，それぞれの値が10個，のモデルファイルに対し，<br>
+強度が4のCovering Arrayを簡単に生成できることを目的とします。<br>
+<br>
+ただし，最少のテストケースになることは求めません。<br>
+ソフトウェアの自動テストであれば100万件くらいは一晩で流せるためです。<br>
+<br>
+欲張って最適解を探すアルゴリズムを入れていないため，<br>
+強度があがってもそれなりに生成できます。<br>
+が，あまりにも無欲なので，テストサイズが大きすぎます。<br>
+<br>
+試しに作ってみたものの，もっと考える余地があります。<br>
+
+<br>
+mf_5_5.txt
+<pre class="file">
+A : a1,a2,a3,a4,a5
+B : b1,b2,b3,b4,b5
+C : c1,c2,c3,c4,c5
+D : d1,d2,d3,d4,d5
+E : e1,e2,e3,e4,e5
+</pre>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp;  mf_5_5.txt -algorithm BigCA -strength 4   </span>
+</span>
+
+<br>
+<br>
+<br>
+<h2>pictとの比較</h2>
+<p>
+強度2,3なら圧倒的にpictがよいですね．．．<br>
+-algorithm BigCAは，まだダメだな。<br>
+<br>
+<img src="performance_bigca.png"><br>
+<br>
+<br>
+<br>

@@ -1,0 +1,276 @@
+﻿<html>
+<head>
+<title>生成済み配列の検証用オプション (-check) </title>
+
+<META NAME="keywords" 
+   content="Orthogonal Array">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="dict.css" rel=stylesheet type=text/css>
+</head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36719649-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<body>
+<h1>生成済み配列の検証用オプション (-check) </h1>
+  <div class="topicpathR">
+  <a href="index.html" class="nodecoration">top</a>  &gt; 
+  生成済み配列の検証用オプション
+  </div>
+
+
+<h2>オプション</h2>
+<p>
+
+<pre>
+＜直交表の検証向けのオプション＞
+     -check | -c  : check array data
+     -indelimit  char | -id char : input-data delimiter (defalut=tab)
+     -NoParamName | -np : no parameter name in array
+     -way num | -w num : caliculate num-way coverage in -show mode
+</pre>
+
+<br>
+
+<!--
+<ul>
+  <li>大文字小文字は区別しません。
+  <li>長い名前のオプションの途中までで認識する機能はありません。<br>
+      かならず最後までうつか，短縮形のオプションをご使用ください。
+</ul>
+-->
+
+
+<br>
+<h2>検証時の注意事項</h2>
+<p>
+
+<p>
+・チェックしたいファイルの先頭行はパラメタ名のレコードです。<br>
+・2行目以降がテストデータになります。データ間の区切りはタブです。<br>
+array_file.txt 
+<pre class="file">
+AAA	BBB	CCC
+a_1	b_1	c_1
+a_1	b_2	c_2
+a_2	b_1	c_1
+a_2	b_2	c_2
+a_3	b_1	c_2
+a_3	b_2	c_1
+a_4	b_1	c_2
+a_4	b_2	c_1
+</pre>
+<p>
+こうやって，チェックします。<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check &nbsp;  array_file.txt  </span>
+</span>
+<br>
+<br>
+<pre>
+#--------------------------------------------------------
+## 2-way coverage 
+# coverage rate        : 100 % <span class="com">&lt;-- 2因子間網羅率</span>
+# 2-way combinations   : 20 <span class="com">&lt;-- 2因子間の全組合せ数</span>
+# covered combinations : 20 <span class="com">&lt;-- 生成結果でカバーしている数</span>
+## 3-way coverage
+# coverage rate        : 50 % <span class="com">&lt;-- 3因子間網羅率</span>
+# 3-way combinations   : 16
+# covered combinations : 8
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 36
+# L(n)  : 36
+# ratio : 1 <span class="com">&lt;-- 1なら直交表</span>
+</pre>
+<br>
+<br>
+
+<h2>-indelimit  区切り文字 | -id 区切り文字</h2>
+<p>
+入力データの区切り文字を変更します<br>
+<br>
+（例） カンマ区切り<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  -indelimit &nbsp; ,  
+  &nbsp; NOA_file_01.txt
+  </span><br>
+</span>
+<br>
+
+
+
+<br>
+
+
+<h2>-NoParamName | -np</h2>
+<p>
+入力データの最初に，パラメタ名のレコードがないものと見直します<br>
+<br>
+model_file_01.txt
+<pre class="file">
+AAA : a_1,a_2,a_3,a_4
+BBB : b_1,b_2
+CCC : c_1,c_2
+</pre>
+<br>
+
+<p>
+直交表の生成<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp;  model_file_01.txt 
+  &nbsp;  >  &nbsp;  array_file.txt </span>
+</span>
+
+<br>
+<br>
+ここで，<br>
+array_file.txt
+<pre class="file">
+<font color=blue>AAA BBB CCC</font>  <span class="com">&lt;--- この行はパラメタ名。</span>
+a_1 b_1 c_1       <span class="com">もし，これがないとき-NoParamNameを指定</span>
+a_1 b_2 c_2
+a_2 b_1 c_1
+a_2 b_2 c_2
+a_3 b_1 c_2
+a_3 b_2 c_1
+a_4 b_1 c_2
+a_4 b_2 c_1
+</pre>
+<br>
+<br>
+
+
+<h2>その他の使用例 </h2>
+
+
+<p>
+array_file02.txt （先頭にパラメタ名の列がなく，カンマ区切りのデータ）
+<pre class="file">
+a_1,b_1,c_1   
+a_1,b_2,c_2
+a_2,b_1,c_1
+a_2,b_2,c_2
+a_3,b_1,c_2
+a_3,b_2,c_1
+a_4,b_1,c_2
+a_4,b_2,c_1
+</pre>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check   
+  &nbsp; array_file02.txt  &nbsp; -NoParamName  &nbsp; -indelimit  &nbsp; , </span>
+</span>
+<pre>
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 20
+# covered combinations : 20
+## 3-way coverage
+# coverage rate        : 50 %
+# 3-way combinations   : 16
+# covered combinations : 8
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 36
+# L(n)  : 36
+# ratio : 1
+</pre>
+<br>
+<br>
+<p>
+OAG自身の生成結果を再度入力する。<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp;  model_file_01.txt 
+  &nbsp;  >  &nbsp;  array_file.txt </span>
+</span>
+<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check   
+  &nbsp; array_file.txt  &nbsp;    </span>
+</span>
+<br>
+<br>
+<br>
+
+
+<p>
+pictの結果を確認する。<br>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">pict   &nbsp;  model_file_01.txt 
+  &nbsp;  >  &nbsp;  array_file.txt </span>
+</span>
+<br>
+
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG   &nbsp; -check   
+  &nbsp; array_file.txt  &nbsp;    </span>
+</span>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+
+<h2>-way num | -w num </h2>
+<p>
+num 因子間網羅率まで計算します。<br>
+（デフォルトでは，2または3因子間網羅率です）<br>
+
+<br>
+model_file_03.txt
+<pre class="file">
+AAA : a_1, a_2, a_3, a_4, a_5
+BBB : b_1, b_2, b_3, b_4, b_5
+CCC : c_1, c_2, c_3, c_4, c_5
+DDD : d_1, d_2, d_3, d_4, d_5
+EEE : e_1, e_2, e_3, e_4, e_5
+FFF : f_1, f_2, f_3, f_4, f_5
+</pre>
+<br>
+<p>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp; 
+     &nbsp; model_file_03.txt &nbsp; >   &nbsp;  tmp
+  </span><br>
+</span>
+<span class="cmdlineprompt">[hyam@hyam sample]$ &nbsp;
+  <span class="cmdline">OAG  &nbsp;  -check &nbsp; -way 5  &nbsp; tmp
+  </span><br>
+</span>
+<pre>
+#--------------------------------------------------------
+## 2-way coverage
+# coverage rate        : 100 %
+# 2-way combinations   : 375
+# covered combinations : 375
+## 3-way coverage
+# coverage rate        : 20 %
+# 3-way combinations   : 2500
+# covered combinations : 500
+## 4-way coverage
+# coverage rate        : 3 %
+# 4-way combinations   : 9375
+# covered combinations : 375
+## 5-way coverage
+# coverage rate        : 0 %
+# 5-way combinations   : 18750
+# covered combinations : 150
+#--------------------------------------------------------
+## Confirm Array
+# J2(d) : 300
+# L(n)  : 300
+# ratio : 1</pre>
+<br>
+
